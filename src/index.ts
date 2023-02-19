@@ -14,18 +14,18 @@ import {
 import http from 'http';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import { loadSchemaSync } from '@graphql-tools/load';
+import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
+import { join } from 'path';
 
-const typeDefs = `
-  type Query {
-    hello: String
-}
-`;
 
+const typeDefs = loadSchemaSync(join(__dirname, "schemas/schema.graphql"), { loaders: [new GraphQLFileLoader()] });
 const resolvers = {
   Query: {
     hello: () => 'world',
   },
 };
+
 
 const app: Express = express();
 const httpServer = http.createServer(app);
