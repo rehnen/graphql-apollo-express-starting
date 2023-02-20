@@ -1,12 +1,7 @@
-import express,
-{
-  Express,
-} from 'express';
+import express, { Express } from 'express';
+import { expressMiddleware } from '@apollo/server/express4';
 import {
-  expressMiddleware,
-} from '@apollo/server/express4';
-import {
-  ApolloServer,
+  ApolloServer, BaseContext,
 } from '@apollo/server';
 import {
   ApolloServerPluginDrainHttpServer,
@@ -17,26 +12,27 @@ import bodyParser from 'body-parser';
 import { loadSchemaSync } from '@graphql-tools/load';
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
 import { join } from 'path';
+import { Person, Resolvers } from './generated/graphql';
 
-
-const typeDefs = loadSchemaSync(join(__dirname, "schemas/schema.graphql"), { loaders: [new GraphQLFileLoader()] });
-const resolvers = {
+const typeDefs = loadSchemaSync(join(__dirname, 'schemas/schema.graphql'), { loaders: [new GraphQLFileLoader()] });
+const resolvers: Resolvers = {
   Query: {
     hello: () => 'world',
+    person: (): Person => {
+      const person: Person = { firstName: 'marcus', lastName: 'rehn' };
+      return person;
+    },
   },
 };
 
-
 const app: Express = express();
 const httpServer = http.createServer(app);
-const server = new ApolloServer({
+const server = new ApolloServer<BaseContext>({
   typeDefs,
   resolvers,
-  plugins: [ApolloServerPluginDrainHttpServer({
-    httpServer,
-  }),
-  ],
+  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
+
 server.start().then(() => {
   const port = 8000;
   httpServer.listen({
@@ -47,12 +43,10 @@ server.start().then(() => {
   });
 
   app.use(
-    cors(),
-    bodyParser.json(),
-  );
-
-  app.all(
     '/graphql',
+    cors<cors.CorsRequest>(),
+    bodyParser.json(),
     expressMiddleware(server),
   );
+
 });
