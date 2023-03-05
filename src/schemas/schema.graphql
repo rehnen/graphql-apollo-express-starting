@@ -3,8 +3,18 @@ type Query {
   person: Person
 }
 
-type Person {
-  firstName: String
-  lastName: String
+directive @auth(role: Role = USER) on OBJECT | FIELD_DEFINITION
+
+directive @launch_darkly(flag: String)
+
+enum Role {
+  ADMIN
+  USER
+} 
+
+type Person @auth(requires: ADMIN) {
+  firstName: String!
+  lastName: String @auth(requires: ADMIN)
+  hidePassword: String @hidePassword()
 }
 

@@ -16,7 +16,7 @@ export type Scalars = {
 
 export type Person = {
   __typename?: 'Person';
-  firstName?: Maybe<Scalars['String']>;
+  firstName: Scalars['String'];
   lastName?: Maybe<Scalars['String']>;
 };
 
@@ -25,6 +25,11 @@ export type Query = {
   hello?: Maybe<Scalars['String']>;
   person?: Maybe<Person>;
 };
+
+export enum Role {
+  Admin = 'ADMIN',
+  User = 'USER'
+}
 
 
 
@@ -98,6 +103,7 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Person: ResolverTypeWrapper<Person>;
   Query: ResolverTypeWrapper<{}>;
+  Role: Role;
   String: ResolverTypeWrapper<Scalars['String']>;
 };
 
@@ -109,8 +115,14 @@ export type ResolversParentTypes = {
   String: Scalars['String'];
 };
 
+export type AuthDirectiveArgs = {
+  requires?: Maybe<Role>;
+};
+
+export type AuthDirectiveResolver<Result, Parent, ContextType = any, Args = AuthDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
 export type PersonResolvers<ContextType = any, ParentType extends ResolversParentTypes['Person'] = ResolversParentTypes['Person']> = {
-  firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -125,3 +137,6 @@ export type Resolvers<ContextType = any> = {
   Query?: QueryResolvers<ContextType>;
 };
 
+export type DirectiveResolvers<ContextType = any> = {
+  auth?: AuthDirectiveResolver<any, any, ContextType>;
+};
