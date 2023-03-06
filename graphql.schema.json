@@ -57,6 +57,29 @@
       },
       {
         "kind": "OBJECT",
+        "name": "Potato",
+        "description": null,
+        "fields": [
+          {
+            "name": "name",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "Query",
         "description": null,
         "fields": [
@@ -1042,7 +1065,7 @@
         ],
         "args": [
           {
-            "name": "requires",
+            "name": "role",
             "description": null,
             "type": {
               "kind": "ENUM",

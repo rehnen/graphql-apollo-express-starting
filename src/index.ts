@@ -1,5 +1,4 @@
 import express, { Express } from 'express';
-import { GraphQLError, GraphQLSchema, defaultFieldResolver } from 'graphql';
 import { expressMiddleware } from '@apollo/server/express4';
 import {
   ApolloServer, BaseContext,
@@ -11,7 +10,6 @@ import http from 'http';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import { loadSchemaSync } from '@graphql-tools/load';
-import { mapSchema, MapperKind, getDirective } from '@graphql-tools/utils';
 
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
@@ -31,10 +29,8 @@ const resolvers: Resolvers = {
 };
 
 const app: Express = express();
+
 const httpServer = http.createServer(app);
-
-
-
 
 function getUser(token: string) {
   const roles = ['UNKNOWN', 'USER', 'REVIEWER', 'ADMIN']
@@ -60,7 +56,6 @@ const server = new ApolloServer<BaseContext>({
   schema
 });
 
-
 server.start().then(() => {
 
   const port = 8000;
@@ -77,6 +72,7 @@ server.start().then(() => {
     bodyParser.json(),
     expressMiddleware(server, {
       context: async ({ req }) => {
+        console.log(req.headers)
         return {
           headers: req.headers,
           models: {
