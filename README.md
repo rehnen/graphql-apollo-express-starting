@@ -11,10 +11,10 @@ This repository serves as a boilerplate or a cheat sheet for creating a graphql 
 * TypeScript
 * Dev server
 * Eslint config
+* TypeScript typedef generations from schema.
 
 
 ## The project does not include (yet)
 
 * Tests
-* TypeScript typedef generations from schema.
-* Babel (hopefully never, but it might be needed for type generation)
+* Babel (hopefully never will)
