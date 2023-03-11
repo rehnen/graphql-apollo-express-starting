@@ -34,12 +34,13 @@ const httpServer = http.createServer(app);
 
 function getUser(token: string) {
   const roles = ['UNKNOWN', 'USER', 'REVIEWER', 'ADMIN']
-  console.log(token)
   return {
-    hasRole: (role: string) => {
+    hasRole: (role: string): Promise<boolean> => {
       const tokenIndex = roles.indexOf(token);
       const roleIndex = roles.indexOf(role);
-      return roleIndex >= 0 && tokenIndex >= roleIndex;
+      return new Promise((res) => {
+        setTimeout(() => res(roleIndex >= 0 && tokenIndex >= roleIndex), 1000);
+      });
     }
   }
 }
@@ -72,7 +73,6 @@ server.start().then(() => {
     bodyParser.json(),
     expressMiddleware(server, {
       context: async ({ req }) => {
-        console.log(req.headers)
         return {
           headers: req.headers,
           models: {
