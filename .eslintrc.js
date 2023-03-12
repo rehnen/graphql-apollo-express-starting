@@ -2,7 +2,7 @@ module.exports = {
   env: {
     es2021: true
   },
-  extends: ['airbnb-base', 'airbnb-typescript/base'],
+  extends: ['airbnb-base', 'airbnb-typescript/base', 'plugin:prettier/recommended'],
   overrides: [
   ],
   parserOptions: {
@@ -11,5 +11,8 @@ module.exports = {
     sourceType: 'module'
   },
   rules: {
+    "import/prefer-default-export": "off",
+    "import/no-default-export": "error"
   }
+
 }

@@ -11,6 +11,7 @@ This repository serves as a boilerplate or a cheat sheet for creating a graphql 
 * TypeScript
 * Dev server
 * Eslint config
+* Prettier
 * TypeScript typedef generations from schema.
 
 
