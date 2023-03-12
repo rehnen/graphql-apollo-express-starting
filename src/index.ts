@@ -32,13 +32,18 @@ const app: Express = express();
 const httpServer = http.createServer(app);
 
 function getUser(token: string) {
-  const roles = ["UNKNOWN", "USER", "REVIEWER", "ADMIN"];
+  const roles = ["USER", "ADMIN"];
   return {
-    hasRole: (role: string): Promise<boolean> => {
+    hasRole: (role: Role): Promise<boolean> => {
       const tokenIndex = roles.indexOf(token);
       const roleIndex = roles.indexOf(role);
       return new Promise((res) => {
-        setTimeout(() => res(roleIndex >= 0 && tokenIndex >= roleIndex), 1000);
+        setTimeout(() => {
+          if (tokenIndex) {
+            return res(roles[tokenIndex] === role);
+          }
+          return res(roleIndex >= 0 && tokenIndex >= roleIndex);
+        }, 1000);
       });
     },
   };
@@ -51,8 +56,6 @@ const schema = authDirectiveTransformer(
     resolvers,
   })
 );
-
-console.log("this is some cools stuf");
 
 const server = new ApolloServer<BaseContext>({
   schema,
@@ -79,7 +82,7 @@ server.start().then(() => {
       context: async ({ req }) => ({
         headers: req.headers,
         models: {
-          Person: req.headers.authorization ? Role.Admin : Role.User,
+          Person: req.headers.authorization,
         },
         authScope: req.headers.authorization,
       }),

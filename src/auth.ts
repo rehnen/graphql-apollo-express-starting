@@ -5,10 +5,11 @@ import {
   GraphQLFieldConfig,
   GraphQLSchema,
 } from "graphql";
+import { Role } from "./generated/graphql";
 
 export function authDirective(
   directiveName: string,
-  getUserFn: (token: string) => { hasRole: (role: string) => Promise<boolean> }
+  getUserFn: (token: string) => { hasRole: (role: Role) => Promise<boolean> }
 ) {
   const typeDirectiveArgumentMaps: Record<string, any> = {};
   return {

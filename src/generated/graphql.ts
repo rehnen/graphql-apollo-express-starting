@@ -31,10 +31,9 @@ export type Query = {
   person?: Maybe<Person>;
 };
 
-export enum Role {
-  Admin = 'ADMIN',
-  User = 'USER'
-}
+export type Role =
+  | 'ADMIN'
+  | 'USER';
 
 
 

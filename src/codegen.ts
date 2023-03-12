@@ -1,4 +1,3 @@
-
 import type { CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
@@ -6,7 +5,10 @@ const config: CodegenConfig = {
   schema: "./src/schemas",
   generates: {
     "src/generated/graphql.ts": {
-      plugins: ["typescript", "typescript-resolvers", "typescript-document-nodes"]
+      plugins: ["typescript", "typescript-resolvers", "typescript-document-nodes"],
+      config: {
+        enumsAsTypes: true, // Because typescript enums are terrible
+      }
     },
     "./graphql.schema.json": {
       plugins: ["introspection"]
