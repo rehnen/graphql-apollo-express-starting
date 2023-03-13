@@ -1,4 +1,5 @@
 module.exports = {
+  root: true,
   env: {
     es2021: true
   },
@@ -12,6 +13,13 @@ module.exports = {
   },
   rules: {
     "import/prefer-default-export": "off",
+    'prettier/prettier': [
+      'error',
+      {
+        singleQuote: true,
+        semi: true,
+      }
+    ],
     "import/no-default-export": "error"
   }
 

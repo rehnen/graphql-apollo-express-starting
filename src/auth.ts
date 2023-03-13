@@ -1,11 +1,11 @@
 /* eslint-disable no-param-reassign */
-import { getDirective, MapperKind, mapSchema } from "@graphql-tools/utils";
+import { getDirective, MapperKind, mapSchema } from '@graphql-tools/utils';
 import {
   defaultFieldResolver,
   GraphQLFieldConfig,
   GraphQLSchema,
-} from "graphql";
-import { Role } from "./generated/graphql";
+} from 'graphql';
+import { Role } from './generated/graphql';
 
 export function authDirective(
   directiveName: string,
