@@ -3,6 +3,8 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.js",
+    "jest.config.ts",
+    ".eslintrc.js",
     "test/**/*.ts"
   ],
   "exclude": [

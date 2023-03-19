@@ -13,9 +13,8 @@ This repository serves as a boilerplate or a cheat sheet for creating a graphql 
 * Eslint config
 * Prettier
 * TypeScript typedef generations from schema.
-
+* Tests
 
 ## The project does not include (yet)
 
-* Tests
 * Babel (hopefully never will)

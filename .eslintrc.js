@@ -1,26 +1,28 @@
 module.exports = {
   root: true,
   env: {
-    es2021: true
+    es2021: true,
   },
-  extends: ['airbnb-base', 'airbnb-typescript/base', 'plugin:prettier/recommended'],
-  overrides: [
+  extends: [
+    'airbnb-base',
+    'airbnb-typescript/base',
+    'plugin:prettier/recommended',
   ],
+  overrides: [],
   parserOptions: {
     ecmaVersion: 'latest',
     project: './tsconfig.eslint.json',
-    sourceType: 'module'
+    sourceType: 'module',
   },
   rules: {
-    "import/prefer-default-export": "off",
+    'import/prefer-default-export': 'off',
     'prettier/prettier': [
       'error',
       {
         singleQuote: true,
         semi: true,
-      }
+      },
     ],
-    "import/no-default-export": "error"
-  }
-
-}
+    'import/no-default-export': 'error',
+  },
+};

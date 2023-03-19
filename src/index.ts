@@ -5,43 +5,18 @@ import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHt
 import http from 'http';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { loadSchemaSync } from '@graphql-tools/load';
 
-import { makeExecutableSchema } from '@graphql-tools/schema';
-import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
-import { join } from 'path';
-import { Person, Resolvers } from './generated/graphql';
+import { schema } from './schema';
 import { authDirective } from './auth';
 import { getUser } from './userService';
 
-const typeDefs = loadSchemaSync(join(__dirname, 'schemas/schema.graphql'), {
-  loaders: [new GraphQLFileLoader()],
-});
-const resolvers: Resolvers = {
-  Query: {
-    hello: () => 'world',
-    person: (): Person => {
-      // _, __, contextValue, info // available parameters
-      const person: Person = { firstName: 'marcus', lastName: 'rehn' };
-      return person;
-    },
-  },
-};
-
+const { authDirectiveTransformer } = authDirective('auth', getUser);
 const app: Express = express();
 
 const httpServer = http.createServer(app);
 
-const { authDirectiveTransformer } = authDirective('auth', getUser);
-const schema = authDirectiveTransformer(
-  makeExecutableSchema({
-    typeDefs,
-    resolvers,
-  })
-);
-
-const server = new ApolloServer<BaseContext>({
-  schema,
+export const server = new ApolloServer<BaseContext>({
+  schema: authDirectiveTransformer(schema),
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
@@ -51,9 +26,9 @@ server.start().then(() => {
     {
       port,
     },
-    () => console.info(`server running on ${port}`)
+    () => console.info(`server running on ${port}`) // eslint-disable-line no-console
   );
-  app.get('/test', (req, res) => {
+  app.get('/test', (_req, res) => {
     res.send('Express + TypeScript Server');
   });
 
