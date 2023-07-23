@@ -7,6 +7,7 @@ import { Person, Resolvers } from './generated/graphql';
 const typeDefs = loadSchemaSync(join(__dirname, 'schemas/schema.graphql'), {
   loaders: [new GraphQLFileLoader()],
 });
+
 const resolvers: Resolvers = {
   Query: {
     hello: () => 'world',

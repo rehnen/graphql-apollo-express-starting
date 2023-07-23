@@ -20,11 +20,6 @@ export type Person = {
   lastName?: Maybe<Scalars['String']>;
 };
 
-export type Potato = {
-  __typename?: 'Potato';
-  name?: Maybe<Scalars['String']>;
-};
-
 export type Query = {
   __typename?: 'Query';
   hello?: Maybe<Scalars['String']>;
@@ -106,7 +101,6 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Person: ResolverTypeWrapper<Person>;
-  Potato: ResolverTypeWrapper<Potato>;
   Query: ResolverTypeWrapper<{}>;
   Role: Role;
   String: ResolverTypeWrapper<Scalars['String']>;
@@ -116,7 +110,6 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   Person: Person;
-  Potato: Potato;
   Query: {};
   String: Scalars['String'];
 };
@@ -133,11 +126,6 @@ export type PersonResolvers<ContextType = any, ParentType extends ResolversParen
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type PotatoResolvers<ContextType = any, ParentType extends ResolversParentTypes['Potato'] = ResolversParentTypes['Potato']> = {
-  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   hello?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   person?: Resolver<Maybe<ResolversTypes['Person']>, ParentType, ContextType>;
@@ -145,7 +133,6 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type Resolvers<ContextType = any> = {
   Person?: PersonResolvers<ContextType>;
-  Potato?: PotatoResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 };
 

@@ -7,10 +7,7 @@ import {
 } from 'graphql';
 import { Role } from './generated/graphql';
 
-export function authDirective(
-  directiveName: string,
-  getUserFn: (token: string) => { hasRole: (role: Role) => Promise<boolean> }
-) {
+export function authDirective(directiveName: string) {
   const typeDirectiveArgumentMaps: Record<string, any> = {};
   return {
     authDirectiveTransformer: (schema: GraphQLSchema) =>
@@ -37,17 +34,15 @@ export function authDirective(
           if (!directive) {
             return;
           }
-          const { role } = directive;
+          console.log(directive);
+          const { role }: { role: Role } = directive;
           if (role) {
             const { resolve = defaultFieldResolver } = fieldConfig;
             fieldConfig.resolve = async (source, args, context, info) => {
-              const isAdmin = await getUserFn(
-                context.headers.authtoken
-              ).hasRole(role);
-              if (!isAdmin) {
-                return null;
-              }
-              return resolve(source, args, context, info);
+              const { user } = context;
+              return user.roles.includes(role)
+                ? resolve(source, args, context, info)
+                : null;
             };
           }
         },
