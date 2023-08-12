@@ -5,7 +5,10 @@ import {
   GraphQLFieldConfig,
   GraphQLSchema,
 } from 'graphql';
+import jwt from 'jsonwebtoken';
 import { Role } from './generated/graphql';
+
+import { Request, Response, NextFunction } from 'express';
 
 export function authDirective(directiveName: string) {
   const typeDirectiveArgumentMaps: Record<string, any> = {};
@@ -49,3 +52,18 @@ export function authDirective(directiveName: string) {
       }),
   };
 }
+
+export function validateToken(req: Request, res: Response, next: NextFunction) {
+  try {
+    console.log('validating');
+    const token = req.cookies.token;
+    const user = jwt.verify(token, 'super secret');
+    console.log(user);
+    next();
+  } catch (error) {
+    console.log(error);
+    res.clearCookie('token');
+    res.redirect('/');
+  }
+}
+

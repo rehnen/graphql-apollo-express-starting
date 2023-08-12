@@ -14,7 +14,7 @@ enum Role {
 
 type Person {
   firstName: String!
-  lastName(): String @auth(role: ADMIN)
+  lastName: String @auth(role: ADMIN)
 }
 
 
