@@ -8,16 +8,14 @@ directive @auth(role: Role = USER) on OBJECT | FIELD_DEFINITION
 # directive @launch_darkly(flag: String)
 
 enum Role {
+  SUPER_ADMIN
   ADMIN
   USER
 } 
 
-type Person {
+type Person @auth(role: SUPER_ADMIN) {
   firstName: String!
   lastName: String @auth(role: ADMIN)
 }
-
-
-
 
 
