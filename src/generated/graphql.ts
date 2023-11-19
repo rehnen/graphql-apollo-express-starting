@@ -28,6 +28,7 @@ export type Query = {
 
 export type Role =
   | 'ADMIN'
+  | 'SUPER_ADMIN'
   | 'USER';
 
 

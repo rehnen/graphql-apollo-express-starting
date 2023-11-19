@@ -6,9 +6,8 @@ import {
   GraphQLSchema,
 } from 'graphql';
 import jwt from 'jsonwebtoken';
+import { Response, Request, NextFunction } from 'express';
 import { Role } from './generated/graphql';
-
-import { Request, Response, NextFunction } from 'express';
 
 export function authDirective(directiveName: string) {
   const typeDirectiveArgumentMaps: Record<string, any> = {};
@@ -17,6 +16,7 @@ export function authDirective(directiveName: string) {
       mapSchema(schema, {
         [MapperKind.TYPE]: (type) => {
           const directive = getDirective(schema, type, directiveName)?.[0];
+          console.log('type level', directive);
           if (directive) {
             typeDirectiveArgumentMaps[type.name] = directive;
           }
@@ -37,17 +37,21 @@ export function authDirective(directiveName: string) {
           if (!directive) {
             return;
           }
-          console.log(directive);
           const { role }: { role: Role } = directive;
           if (role) {
             const { resolve = defaultFieldResolver } = fieldConfig;
+            console.log('roles')
             fieldConfig.resolve = async (source, args, context, info) => {
               const { user } = context;
+              console.log('role', role)
+              console.log(source)
+              console.log(args)
               return user.roles.includes(role)
                 ? resolve(source, args, context, info)
                 : null;
             };
           }
+          return fieldConfig;
         },
       }),
   };
@@ -55,15 +59,11 @@ export function authDirective(directiveName: string) {
 
 export function validateToken(req: Request, res: Response, next: NextFunction) {
   try {
-    console.log('validating');
-    const token = req.cookies.token;
-    const user = jwt.verify(token, 'super secret');
-    console.log(user);
+    const { token } = req.cookies;
+    jwt.verify(token, 'super secret');
     next();
   } catch (error) {
-    console.log(error);
     res.clearCookie('token');
     res.redirect('/');
   }
 }
-

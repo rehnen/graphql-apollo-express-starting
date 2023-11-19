@@ -1,6 +1,6 @@
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { selectUserQuery } from './db/db';
 import { Role } from './generated/graphql';
-import jwt from 'jsonwebtoken';
 
 export type User = {
   firstName: string;
@@ -9,6 +9,8 @@ export type User = {
   roles: Role[];
 };
 
+// TODO: Replace this some authz service
+// Now this is used to keep track of roles
 const users: User[] = [
   {
     firstName: 'Marcus',
@@ -38,12 +40,20 @@ export const loginUser = async (
     return 'didnt find anything';
   }
   return jwt.sign(user, 'super secret');
-
 };
 
 // this is just a placeholder until we get jwts in place
 export const getUser = (token: string) => {
-  return new Promise<User | undefined>((res) => {
-    setTimeout(() => res(users.find(({ email }) => email === token)), 500);
+  return new Promise<User | undefined>((res, rej) => {
+    setTimeout(() => {
+      const { payload } = jwt.verify(token, 'super secret', { complete: true });
+      const user = users.find(({ email }) => {
+        return email === (payload as JwtPayload).email;
+      });
+      if (user) {
+        res(user);
+      }
+      rej(new Error('failed to find that user'));
+    }, 500);
   });
 };

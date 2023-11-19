@@ -8,6 +8,7 @@ export const selectUserQuery = (email: string, password: string) => {
       `SELECT * FROM user WHERE email = "${email}" AND password = "${password}"`,
       (err, row) => {
         if (err) {
+          console.error('super error', err);
           rej(err);
         }
         res(row);
@@ -20,13 +21,10 @@ export const selectUserQuery = (email: string, password: string) => {
 export const startupSript = () => {
   const select = () => {
     db.all('SELECT * FROM user', (err, rows) => {
-      console.log('select');
-      console.log(err ?? 'no err');
       rows.forEach(console.log);
     });
   };
   const insert = (result: any, error: any) => {
-    console.log('insert');
     if (error) {
       console.log(error);
       return;
@@ -35,7 +33,6 @@ export const startupSript = () => {
       'INSERT INTO user (name, email, password) VALUES("Marcus Rehn", "marcus.rehn@hotmail.com", "test")',
       select
     );
-    console.log(result);
   };
   const create = () =>
     db.run('CREATE TABLE user (name text, email text, password text)', insert);
